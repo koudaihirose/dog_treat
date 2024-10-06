@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>おやつ名</th>
+            <th>説明</th>
+            <th>購入日</th>
+            <th>アレルギー情報</th>
+            <th>在庫数</th>
+        </tr>
+        {% for snack in snacks %}
+        <tr>
+            <td>{{ snack.name }}</td>
+            <td>{{ snack.description }}</td>
+            <td>{{ snack.purchase_date }}</td>
+            <td>{{ snack.allergy_name if snack.allergy_name else 'なし' }}</td>
+            <td>
+                {% set stock = snack.purchased_quantity - snack.given_quantity %}
+                {% if stock <= 0 %}
+                <span class="out-of-stock">在庫切れ</span>
+                {% else %}
+                    {{ stock }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+</table>
+
+</body>
+</html>
