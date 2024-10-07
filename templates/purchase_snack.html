@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>おやつの購入履歴を登録</h2>
+    <form method="POST" action="{{ url_for('purchase_snack') }}">
+        <label for="snack_name">おやつの名前:</label>
+        <select name="snack_name" id="snack_name" required>
+            {% for snack in snacks %}
+                <option value="{{ snack.id }}">{{ snack.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="purchase_date">購入日時:</label>
+        <input type="datetime-local" name="purchase_date" id="purchase_date" required>
+
+        <label for="purchase_place">購入場所:</label>
+        <input type="text" name="purchase_place" id="purchase_place" >
+
+        <label for="quantity">購入個数:</label>
+        <input type="number" name="quantity" id="quantity" required>
+
+        <button type="submit">登録</button>
+    </form>
+    
+{% endblock %}
