@@ -6,23 +6,20 @@
         <thead>
             <tr>
                 <th>おやつの名前</th>
-                <th>登録済みの個数</th>
-                <th>消費した個数</th>
-                <th>在庫数</th>
                 <th>アレルギー情報</th>
+                <th>在庫数</th>
             </tr>
         </thead>
         <tbody>
             {% for snack in snacks %}
-            <tr>
-                <td>{{ snack.name }}</td>
-                <td>{{ snack.quantity }}</td>
-                <td>{{ snack.consumed }}</td>
-                <td>{{ snack.stock }}</td>
-                <td>{{ snack.allergies }}</td>
-            </tr>
+                <tr>
+                    <td>{{ snack.name }}</td>
+                    <td>{{ snack.allergies }}</td>
+                    <td>{{ snack.stock }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
+    
     
 {% endblock %}

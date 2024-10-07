@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>おやつの消費履歴</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>おやつの名前</th>
+                <th>個数</th>
+                <th>与えた日時</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in give_snack_history %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.quantity }}</td>
+                <td>{{ entry.given_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
