@@ -17,9 +17,10 @@
                 <li><a href="{{ url_for('add_snack') }}">おやつを登録</a></li>
                 <li><a href="{{ url_for('give_snack') }}">おやつをあげる</a></li>
                 <li><a href="{{ url_for('allergies') }}">アレルギー一覧</a></li> <!-- 追加 -->
-                <li><a href="{{ url_for('purchase_snack') }}">おやつの購入履歴を登録</a></li>
-                <li><a href="{{ url_for('give_snack_history') }}">消費履歴を確認</a></li>
-                <li><a href="#">在庫確認</a></li>
+                <li><a href="{{ url_for('purchase_snack') }}">購入情報を登録</a></li>
+                <li><a href="{{ url_for('purchase_history') }}">購入履歴</a></li>
+                <li><a href="{{ url_for('give_snack_history') }}">消費履歴</a></li>
+                <li><a href="{{ url_for('stock') }}">在庫確認</a></li>
             </ul>
         </nav>
     </header>
