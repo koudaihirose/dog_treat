@@ -1,7 +1,21 @@
-<form method="POST">
-    <label for="given_date">与えた日時:</label>
-    <input type="datetime-local" id="given_date" name="given_date" required>
-    <label for="quantity">与えた個数:</label>
-    <input type="number" id="quantity" name="quantity" required>
-    <button type="submit">記録</button>
-</form>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>おやつをあげる</h2>
+    <form method="POST" action="{{ url_for('give_snack') }}">
+        <label for="snack_id">おやつの名前:</label>
+        <select name="snack_id" id="snack_id">
+            {% for snack in snacks %}
+                <option value="{{ snack.id }}">{{ snack.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="quantity">あげた個数:</label>
+        <input type="number" name="quantity" id="quantity" required>
+
+        <label for="given_date">あげた日付:</label>
+        <input type="date" name="given_date" id="given_date" required>
+
+        <button type="submit">登録</button>
+    </form>
+{% endblock %}

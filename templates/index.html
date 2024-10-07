@@ -1,38 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>登録済みおやつの一覧</h2>
     <table>
-        <tr>
-            <th>おやつ名</th>
-            <th>説明</th>
-            <th>購入日</th>
-            <th>アレルギー情報</th>
-            <th>在庫数</th>
-        </tr>
-        {% for snack in snacks %}
-        <tr>
-            <td>{{ snack.name }}</td>
-            <td>{{ snack.description }}</td>
-            <td>{{ snack.purchase_date }}</td>
-            <td>{{ snack.allergy_name if snack.allergy_name else 'なし' }}</td>
-            <td>
-                {% set stock = snack.purchased_quantity - snack.given_quantity %}
-                {% if stock <= 0 %}
-                <span class="out-of-stock">在庫切れ</span>
-                {% else %}
-                    {{ stock }}
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>おやつの名前</th>
+                <th>登録済みの個数</th>
+                <th>消費した個数</th>
+                <th>在庫数</th>
+                <th>アレルギー情報</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for snack in snacks %}
+            <tr>
+                <td>{{ snack.name }}</td>
+                <td>{{ snack.quantity }}</td>
+                <td>{{ snack.consumed }}</td>
+                <td>{{ snack.stock }}</td>
+                <td>{{ snack.allergies }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     
-</table>
-
-</body>
-</html>
+{% endblock %}

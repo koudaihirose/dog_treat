@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>犬のおやつ管理アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- ヘッダー部分 -->
+    <header>
+        <h1>犬のおやつ管理アプリ</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">ホーム</a></li>
+                <li><a href="{{ url_for('add_snack') }}">おやつを登録</a></li>
+                <li><a href="{{ url_for('give_snack') }}">おやつをあげる</a></li>
+                <li><a href="{{ url_for('allergies') }}">アレルギー一覧</a></li> <!-- 追加 -->
+                <li><a href="#">在庫確認</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ページごとのコンテンツがここに挿入される -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>
