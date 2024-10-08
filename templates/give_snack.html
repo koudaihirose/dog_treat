@@ -1,21 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>おやつをあげる</h2>
-    <form method="POST" action="{{ url_for('give_snack') }}">
-        <label for="snack_id">おやつの名前:</label>
-        <select name="snack_id" id="snack_id">
-            {% for snack in snacks %}
-                <option value="{{ snack.id }}">{{ snack.name }}</option>
-            {% endfor %}
-        </select>
 
-        <label for="quantity">あげた個数:</label>
-        <input type="number" name="quantity" id="quantity" required>
+    <div class="container my-4">
+        <h2 class="mb-4">おやつをあげる</h2>
 
-        <label for="given_date">あげた日付:</label>
-        <input type="date" name="given_date" id="given_date" required>
+        <form method="POST" action="{{ url_for('give_snack') }}">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="snack_id" class="form-label">おやつの名前:</label>
+                    <select name="snack_id" id="snack_id" class="form-select">
+                        {% for snack in snacks %}
+                            <option value="{{ snack.id }}">{{ snack.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <button type="submit">登録</button>
-    </form>
+                <div class="col-md-3">
+                    <label for="given_date" class="form-label">日付:</label>
+                    <input type="date" name="given_date" id="given_date" class="form-control" required>
+                </div>
+
+                <div class="col-md-1">
+                    <label for="quantity" class="form-label">個数:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">登録</button>
+        </form>
+    
+    </div>
 {% endblock %}

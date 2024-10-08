@@ -1,26 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>アレルギー一覧</h2>
 
-    <!-- アレルギー情報を追加するフォーム -->
-    <form method="POST" action="{{ url_for('allergies') }}">
-        <label for="allergy_name">新しいアレルギー:</label>
-        <input type="text" name="allergy_name" id="allergy_name" required>
-        <button type="submit">追加</button>
-    </form>
+    <div class="container my-4">
+        <h2 class="mb-4">登録済みアレルギー一覧</h2>
 
-    <h3>登録済みのアレルギー一覧</h3>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>アレルギー名</th>
-        </tr>
-        {% for allergy in allergies %}
-        <tr>
-            <td>{{ allergy.id }}</td>
-            <td>{{ allergy.name }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        <!-- アレルギー情報を追加するフォーム -->
+        <div class="col-md-5">
+            <form method="POST" action="{{ url_for('allergies') }}" class="mb-4">
+                <div class="input-group">
+                    <!--<label for="allergy_name">新しいアレルギー:</label>-->
+                    <input type="text" class="form-control" name="allergy_name" id="allergy_name" placeholder="新しいアレルギーを追加する場合はここに入力" required>
+                    <button type="submit" class="btn btn-primary">追加</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-2 ">
+            <table class="table table-striped">
+                <tr>
+                    <th>アレルギー名</th>
+                </tr>
+                {% for allergy in allergies %}
+                <tr>
+                    <td>{{ allergy.name }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
 {% endblock %}

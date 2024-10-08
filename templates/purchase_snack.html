@@ -1,25 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>おやつの購入履歴を登録</h2>
-    <form method="POST" action="{{ url_for('purchase_snack') }}">
-        <label for="snack_name">おやつの名前:</label>
-        <select name="snack_name" id="snack_name" required>
-            {% for snack in snacks %}
-                <option value="{{ snack.id }}">{{ snack.name }}</option>
-            {% endfor %}
-        </select>
 
-        <label for="purchase_date">購入日時:</label>
-        <input type="datetime-local" name="purchase_date" id="purchase_date" required>
+    <div class="container my-4">
+        <h2 class="mb-4">おやつの購入履歴を登録</h2>
 
-        <label for="purchase_place">購入場所:</label>
-        <input type="text" name="purchase_place" id="purchase_place" >
+        <form method="POST" action="{{ url_for('purchase_snack') }}">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="snack_name" class="form-label">おやつの名前:</label>
+                    <select name="snack_name" id="snack_name" class="form-select" required>
+                        {% for snack in snacks %}
+                            <option value="{{ snack.id }}">{{ snack.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-        <label for="quantity">購入個数:</label>
-        <input type="number" name="quantity" id="quantity" required>
+                <div class="col-md-3">
+                    <label for="purchase_date" class="form-label">日付:</label>
+                    <input type="datetime-local" name="purchase_date" id="purchase_date" class="form-control" required>
+                </div>
 
-        <button type="submit">登録</button>
-    </form>
-    
+                <div class="col-md-1">
+                    <label for="quantity" class="form-label">個数:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control" required>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="purchase_place" class="form-label">購入場所:</label>
+                    <input type="text" name="purchase_place" id="purchase_place" class="form-control">
+                </div>
+            </div>
+
+            <button type="submit">登録</button>
+        </form>
+    </div>
 {% endblock %}
