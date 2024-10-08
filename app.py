@@ -94,9 +94,12 @@ def purchase_snack():
         purchase_place = request.form['purchase_place']
         quantity = request.form['quantity']
 
+        # 'T'をスペースに置き換える
+        formatted_purchase_date = purchase_date.replace('T', ' ')
+
         # 購入履歴を保存するためのテーブルが必要です。テーブルがない場合は作成してください。
         conn.execute('INSERT INTO purchase_history (snack_id, purchase_date, purchase_place, quantity) VALUES (?, ?, ?, ?)',
-                    (snack_name, purchase_date, purchase_place, quantity))
+                    (snack_name, formatted_purchase_date, purchase_place, quantity))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
@@ -134,9 +137,12 @@ def give_snack():
         quantity = int(request.form['quantity'])
         give_date = request.form['given_date']
 
+        # 'T'をスペースに置き換える
+        formatted_give_date = give_date.replace('T', ' ')
+
         # おやつを与える処理を実行
         conn.execute('INSERT INTO snack_giving (snack_id, quantity, given_date) VALUES (?, ?, ?)',
-                    (snack_id, quantity, give_date))
+                    (snack_id, quantity, formatted_give_date))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
@@ -207,11 +213,14 @@ def add_incident_record():
         note = request.form['note']
         photos = request.files.getlist('photos')  # 複数ファイルの取得
 
+        # 'T'をスペースに置き換える
+        formatted_incident_time = incident_time.replace('T', ' ')
+
         conn = get_db_connection()
 
         # incident_recordsテーブルに記録を追加
         conn.execute('INSERT INTO incident_records (incident_time, note) VALUES (?, ?)',
-                    (incident_time, note))
+                    (formatted_incident_time, note))
         conn.commit()
 
         # 追加した記録のIDを取得
