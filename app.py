@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import os
 from datetime import datetime
+from werkzeug.utils import secure_filename
+
+
 
 # アップロードされたファイルの保存先
 UPLOAD_FOLDER = 'static/photos'  # staticフォルダの中にphotosフォルダを作成
@@ -196,10 +199,55 @@ def stock():
     conn.close()
     return render_template('stock.html', snacks=snacks)
 
+# 記録を追加するルート
+@app.route('/add_incident_record', methods=['GET', 'POST'])
+def add_incident_record():
+    if request.method == 'POST':
+        incident_time = request.form['incident_time']
+        note = request.form['note']
+        photos = request.files.getlist('photos')  # 複数ファイルの取得
 
-@app.errorhandler(405)
-def method_not_allowed(e):
-    return "Method not allowed. Please check the URL and method.", 405
+        conn = get_db_connection()
+
+        # incident_recordsテーブルに記録を追加
+        conn.execute('INSERT INTO incident_records (incident_time, note) VALUES (?, ?)',
+                    (incident_time, note))
+        conn.commit()
+
+        # 追加した記録のIDを取得
+        incident_id = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
+
+        # 写真を保存し、incident_photosテーブルに関連付ける
+        for photo in photos:
+            if photo and photo.filename:
+                filename = secure_filename(photo.filename)
+                photo_path = os.path.join('static/incident_photos', filename)
+                photo.save(photo_path)
+
+                conn.execute('INSERT INTO incident_photos (incident_id, photo_path) VALUES (?, ?)',
+                            (incident_id, photo_path))
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for('incident_records'))
+
+    return render_template('incident_records.html')
+
+@app.route('/incident_records')
+def incident_records():
+    conn = get_db_connection()
+
+    # incident_recordsとincident_photosのデータを結合して取得
+    incident_records = conn.execute('''
+        SELECT ir.id, ir.incident_time, ir.note, 
+            REPLACE(REPLACE(GROUP_CONCAT(ip.photo_path, ', '), '\\', '/'), 'static/', '') AS photos
+        FROM incident_records ir
+        LEFT JOIN incident_photos ip ON ir.id = ip.incident_id
+        GROUP BY ir.id
+    ''').fetchall()
+
+    conn.close()
+    return render_template('incident_records.html', incident_records=incident_records)
 
 if __name__ == '__main__':
     app.run(debug=True)
