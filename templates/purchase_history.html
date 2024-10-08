@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>購入履歴</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>おやつの名前</th>
-                <th>購入日時</th>
-                <th>購入場所</th>
-                <th>個数</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for purchase in purchase_history %}
+    <div class="container my-4">
+        <h2 class="mb-4">購入履歴</h2>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>{{ purchase.name }}</td>
-                    <td>{{ purchase.purchase_date }}</td>
-                    <td>{{ purchase.purchase_place }}</td>
-                    <td>{{ purchase.quantity }}</td>
+                    <th>おやつの名前</th>
+                    <th>購入日時</th>       
+                    <th>個数</th>
+                    <th>購入場所</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for purchase in purchase_history %}
+                    <tr>
+                        <td>{{ purchase.name }}</td>
+                        <td>{{ purchase.purchase_date }}</td>
+                        <td>{{ purchase.quantity }}</td>
+                        <td>{{ purchase.purchase_place }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
 {% endblock %}

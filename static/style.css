@@ -1,3 +1,4 @@
+
 body {
     font-family: Arial, sans-serif;
 }
@@ -59,3 +60,28 @@ th, td {
     color: red;
     font-weight: bold;
 }
+/*
+@media (min-width: 768px) {  
+//PC表示 
+    .table {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+    }
+    .table tr {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+    }
+}*/
+.table {
+    width: auto; /* テーブルの幅を自動に設定 */
+    max-width: 100%; /* 最大幅を100%に設定 */
+    table-layout: fixed; /* 幅の設定を適用 */
+    }
+    .table td, .table th {
+        white-space: nowrap; /* テキストの折り返しを無効にする */
+        max-width: 300px;   /* 最大幅を設定 */
+        overflow: hidden;    /* オーバーフローした部分を隠す */
+        text-overflow: ellipsis; /* テキストがオーバーフローした場合に省略記号を表示 */
+    }

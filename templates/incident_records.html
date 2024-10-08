@@ -1,42 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="POST" action="{{ url_for('add_incident_record') }}" enctype="multipart/form-data">
-        <label for="incident_time">発生時刻:</label>
-        <input type="datetime-local" name="incident_time" id="incident_time" required>
 
-        <label for="note">メモ:</label>
-        <textarea name="note" id="note"></textarea>
+    <div class="container my-4">
+        <h2 class="mb-4">異常発生記録を追加</h2>
 
-        <label for="photos">写真（最大3枚）:</label>
-        <input type="file" name="photos" id="photos" multiple>
+        <form method="POST" action="{{ url_for('add_incident_record') }}" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="note"  class="form-label">メモ:</label>
+                    <textarea name="note" id="note" class="form-control" ></textarea>
+                </div>
 
-        <button type="submit">記録を追加</button>
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>発生時刻</th>
-                <th>メモ</th>
-                <th>写真</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in incident_records %}
-            <tr>
-                <td>{{ record.incident_time }}</td>
-                <td>{{ record.note }}</td>
-                <td>
-                    {% if record.photos %}
-                        {% for photo in record.photos.split(', ') %}
-                            <img src="{{ url_for('static', filename=photo)}}" alt="Incident Photo" style="max-width: 100px;">
-                        {% endfor %}
-                    {% else %}
-                        なし
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <div class="col-md-3">
+                    <label for="incident_time"  class="form-label">発生時刻:</label>
+                    <input type="datetime-local" name="incident_time" id="incident_time" class="form-control" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="photos"  class="form-label">写真（最大3枚）:</label>
+                    <input type="file" name="photos" id="photos" class="form-control" multiple>
+                </div>
+            </div>
+
+            <button type="submit">記録を追加</button>
+        </form>
+
+        <h3 class="mt-4">異常発生記録一覧</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>発生時刻</th>
+                    <th>メモ</th>
+                    <th>写真</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in incident_records %}
+                <tr>
+                    <td>{{ record.incident_time }}</td>
+                    <td>{{ record.note }}</td>
+                    <td>
+                        {% if record.photos %}
+                            {% for photo in record.photos.split(', ') %}
+                                <img src="{{ url_for('static', filename=photo)}}" alt="Incident Photo" style="max-width: 100px;">
+                            {% endfor %}
+                        {% else %}
+                            なし
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

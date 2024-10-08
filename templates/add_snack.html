@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>おやつを登録</h2>
-    <form method="POST" action="{{ url_for('add_snack') }}" enctype="multipart/form-data">
-        <label for="snack_name">おやつの名前:</label>
-        <input type="text" name="snack_name" id="snack_name" required>
-    
-        <label for="allergy_ids">アレルギー:</label>
-        <select name="allergy_ids" id="allergy_ids" multiple>
-            {% for allergy in allergies %}
-                <option value="{{ allergy.id }}">{{ allergy.name }}</option>
-            {% endfor %}
-        </select>
-    
-        <label for="photos">写真 (最大3枚):</label>
-        <input type="file" name="photos" id="photos" multiple accept="image/*" required>
-    
-        <button type="submit">登録</button>
-    </form>
-    
+
+    <div class="container my-4">
+        <h2 class="mb-4">おやつを登録</h2>
+
+        <form method="POST" action="{{ url_for('add_snack') }}" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="snack_name" class="form-label">おやつの名前:</label>
+                    <input type="text" name="snack_name" id="snack_name" class="form-control" required>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="allergy_ids" class="form-label">アレルギー:</label>
+                    <select name="allergy_ids" id="allergy_ids" class="form-select" multiple>
+                        {% for allergy in allergies %}
+                            <option value="{{ allergy.id }}">{{ allergy.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="photos" class="form-label">写真 (最大3枚):</label>
+                    <input type="file" name="photos" id="photos" multiple accept="image/*" class="form-control" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">登録</button>
+        </form>
+    </div>
 {% endblock %}

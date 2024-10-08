@@ -1,35 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>登録済みおやつの一覧</h2>
+
     <p>ここはトップページです。在庫確認にテーブル機能を移しましたのでこのページの表示内容は変更可能です</p>
-    <table>
-        <thead>
-            <tr>
-                <th>おやつの名前</th>
-                <th>アレルギー情報</th>
-                <th>在庫数</th>
-                <th>写真</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for snack in snacks %}
-                <tr>
-                    <td>{{ snack.name }}</td>
-                    <td>{{ snack.allergies }}</td>
-                    <td>{{ snack.stock }}</td>
-                    <td>
-                        {% if snack.photos %}
-                            {% for photo in snack.photos.split(', ') %}
-                                <img src="{{ url_for('static', filename=photo.strip()) }}" alt="Snack Photo" style="max-width: 100px;">
-                            {% endfor %}
-                        {% endif %}
-                    </td>
-                        
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
     
     
 {% endblock %}
