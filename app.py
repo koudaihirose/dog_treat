@@ -81,6 +81,7 @@ def add_snack():
 
     # GETリクエストの場合はアレルギー情報を取得
     allergies = conn.execute('SELECT id, name FROM allergies').fetchall()
+
     conn.close()
     return render_template('add_snack.html', allergies=allergies)
 
@@ -101,18 +102,10 @@ def purchase_snack():
         conn.execute('INSERT INTO purchase_history (snack_id, purchase_date, purchase_place, quantity) VALUES (?, ?, ?, ?)',
                     (snack_name, formatted_purchase_date, purchase_place, quantity))
         conn.commit()
-        conn.close()
-        return redirect(url_for('index'))
 
     # snacksテーブルからおやつのリストを取得
     snacks = conn.execute('SELECT id, name FROM snacks').fetchall()
-    conn.close()
-    return render_template('purchase_snack.html', snacks=snacks)
 
-@app.route('/purchase_history')
-def purchase_history():
-    conn = get_db_connection()
-    
     # 購入履歴を取得
     purchase_history = conn.execute('''
         SELECT p.id, s.name, p.purchase_date, p.purchase_place, p.quantity
@@ -120,17 +113,13 @@ def purchase_history():
         JOIN snacks s ON p.snack_id = s.id
         ORDER BY p.purchase_date DESC
     ''').fetchall()
-    
-    conn.close()
-    return render_template('purchase_history.html', purchase_history=purchase_history)
 
+    conn.close()
+    return render_template('purchase_snack.html', snacks=snacks, purchase_history=purchase_history)
 
 @app.route('/give_snack', methods=['GET', 'POST'])
 def give_snack():
     conn = get_db_connection()
-
-    # snacksテーブルからおやつのリストを取得
-    snacks = conn.execute('SELECT id, name FROM snacks').fetchall()
 
     if request.method == 'POST':
         snack_id = request.form['snack_id']
@@ -144,15 +133,9 @@ def give_snack():
         conn.execute('INSERT INTO snack_giving (snack_id, quantity, given_date) VALUES (?, ?, ?)',
                     (snack_id, quantity, formatted_give_date))
         conn.commit()
-        conn.close()
-        return redirect(url_for('index'))
 
-    conn.close()
-    return render_template('give_snack.html', snacks=snacks)
-
-@app.route('/give_history')
-def give_snack_history():
-    conn = get_db_connection()
+    # snacksテーブルからおやつのリストを取得
+    snacks = conn.execute('SELECT id, name FROM snacks').fetchall()
 
     # 消費履歴を取得
     give_snack_history = conn.execute('''
@@ -161,9 +144,10 @@ def give_snack_history():
         JOIN snacks s ON g.snack_id = s.id
         ORDER BY g.given_date DESC
     ''').fetchall()
-
+    
     conn.close()
-    return render_template('give_snack_history.html', give_snack_history=give_snack_history)
+    return render_template('give_snack.html', snacks=snacks, give_snack_history=give_snack_history)
+
 
 @app.route('/allergies', methods=['GET', 'POST'])
 def allergies():
@@ -205,7 +189,7 @@ def stock():
     conn.close()
     return render_template('stock.html', snacks=snacks)
 
-# 記録を追加するルート
+# 異常記録を追加するルート
 @app.route('/add_incident_record', methods=['GET', 'POST'])
 def add_incident_record():
     if request.method == 'POST':

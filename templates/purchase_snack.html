@@ -32,7 +32,29 @@
                 </div>
             </div>
 
-            <button type="submit">登録</button>
+            <button type="submit" class="btn btn-primary">登録</button>
         </form>
+
+        <h2 class="mt-5">購入履歴</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>おやつの名前</th>
+                    <th>購入日時</th>
+                    <th>個数</th>
+                    <th>購入場所</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchase_history %}
+                    <tr>
+                        <td>{{ purchase.name }}</td>
+                        <td>{{ purchase.purchase_date }}</td>
+                        <td>{{ purchase.quantity }}</td>
+                        <td>{{ purchase.purchase_place }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
