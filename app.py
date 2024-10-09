@@ -276,5 +276,9 @@ def incident_records():
     conn.close()
     return render_template('incident_records.html', incident_records=incident_records)
 
+@app.route('/about')
+def about():
+
+    return render_template('about.html')
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=false)

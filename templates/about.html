@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4" >このアプリについて</h2>
+    <div    class="mb-3">愛犬に与えるおやつのアレルギー情報を管理、記録を目的としたアプリです。<br>
+        愛犬の体調が悪くなった時に過去に摂取したアレルギー物質を確認したり、獣医師に診察をける際の助けになります。</div>
+
+    <h2 class="mb-4">アプリの機能説明</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <strong>おやつの登録</strong>
+            <p class="mb-1">説明: 新しい与えるおやつの情報をに登録できます。名前、アレルギー情報、おやつの写真を登録し、おやつを購入、与える際の記録に使用できます。</p>
+        </li>
+        <li class="list-group-item">
+            <strong>購入記録の登録</strong>
+            <p class="mb-1">説明: 購入したおやつを記録します。登録済みのおやつを選択し、購入日時、数量、購入場所を登録、閲覧できます。</p>
+        </li>
+        <li class="list-group-item">
+            <strong>与えたおやつの記録</strong>
+            <p class="mb-1">説明: 与えたおやつを記録します。登録済みのおやつを選択し与えた日時、数量を登録、管理ができます。</p>
+        </li>
+        <li class="list-group-item">
+            <strong>異常記録</strong>
+            <p class="mb-1">説明: 愛犬に体調不良等の異常が発生した際の記録を保存します。異常が発生した日時、メモ、写真を登録、閲覧できます。異常の発生を記録することで、獣医師に相談する際に役立ちます。また、異常の傾向を把握することも可能です。</p>
+        </li>
+        <li class="list-group-item">
+            <strong>在庫確認</strong>
+            <p class="mb-1">説明: 現在のおやつの在庫を確認できる機能です。登録したおやつの在庫状況をリアルタイムで把握できます。</p>
+        </li>
+    </ul>
+</div>
+{% endblock %}
