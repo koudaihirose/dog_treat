@@ -22,31 +22,37 @@ def get_db_connection():
 @app.route('/')
 def index():
     conn = get_db_connection()
+    # アクティビティを取得 (例として3種類のアクティビティを結合)
 
-    snacks = conn.execute('''
-        SELECT s.id, s.name, 
-                COALESCE(GROUP_CONCAT(a.name, ', '), 'なし') AS allergies,
-                COALESCE(SUM(DISTINCT ph.quantity), 0) AS total_purchased,
-                COALESCE(SUM(DISTINCT sg.quantity), 0) AS total_given,
-                COALESCE(SUM(DISTINCT ph.quantity), 0, 0) - COALESCE(SUM(DISTINCT sg.quantity), 0) AS stock,
-                REPLACE(REPLACE(COALESCE(GROUP_CONCAT(sp.photo_path),'' ), '\\', '/'), 'static/', '') AS photos
+    activities= conn.execute('''
+        SELECT 'register' AS type,'おやつ登録' AS title, registration_date AS date, name AS item_name, "" AS quantity,'' AS note
         FROM snacks s
-        LEFT JOIN snack_allergies sa ON s.id = sa.snack_id
-        LEFT JOIN allergies a ON sa.allergy_id = a.id
-        LEFT JOIN purchase_history ph ON s.id = ph.snack_id
-        LEFT JOIN snack_giving sg ON s.id = sg.snack_id
-        LEFT JOIN snack_photos sp ON s.id = sp.snack_id
-        GROUP BY s.id
+        UNION ALL
+        SELECT 'allergies' AS type,'アレルギー食品追加' AS title, registration_date AS date, a.name AS item_name, "" AS quantity,'' AS note
+        FROM allergies a
+        UNION ALL                 
+        SELECT 'purchase' AS type,'おやつ購入' AS title, p.purchase_date AS date, s.name AS item_name, p.quantity,'' AS note
+        FROM purchase_history p
+        JOIN snacks s ON p.snack_id = s.id
+        UNION ALL
+        SELECT 'give' AS type, 'おやつを与えた' AS title, g.given_date AS date, s.name AS item_name, g.quantity,'' AS note
+        FROM snack_giving g
+        JOIN snacks s ON g.snack_id = s.id
+        UNION ALL
+        SELECT 'incident' AS type, '異常発生' AS title, i.incident_time AS date, '' AS item_name,'' AS quantity,i.note AS note
+        FROM incident_records i
+        ORDER BY date DESC
+        LIMIT 10  -- ここで最大10件を取得
     ''').fetchall()
 
     conn.close()
-    return render_template('index.html', snacks=snacks)
+    return render_template('index.html',recent_activities=activities)
 
 
 
 
-@app.route('/add_snack', methods=['GET', 'POST'])
-def add_snack():
+@app.route('/register_snack', methods=['GET', 'POST'])
+def register_snack():
     conn = get_db_connection()
     if request.method == 'POST':
         snack_name = request.form['snack_name']
@@ -83,7 +89,7 @@ def add_snack():
     allergies = conn.execute('SELECT id, name FROM allergies').fetchall()
 
     conn.close()
-    return render_template('add_snack.html', allergies=allergies)
+    return render_template('register_snack.html', allergies=allergies)
 
 @app.route('/purchase_snack', methods=['GET', 'POST'])
 def purchase_snack():
@@ -128,6 +134,34 @@ def give_snack():
 
         # 'T'をスペースに置き換える
         formatted_give_date = give_date.replace('T', ' ')
+
+        # 現在の在庫数を取得
+        stock_query = '''
+            SELECT 
+                COALESCE(SUM(DISTINCT ph.quantity), 0) - COALESCE(SUM(DISTINCT sg.quantity), 0) AS stock
+            FROM snacks s
+            LEFT JOIN purchase_history ph ON s.id = ph.snack_id
+            LEFT JOIN snack_giving sg ON s.id = sg.snack_id
+            WHERE s.id = ?
+        '''
+        stock_result = conn.execute(stock_query, (snack_id,)).fetchone()
+        current_stock = stock_result['stock'] if stock_result else 0
+
+        # 在庫数をチェック
+        if current_stock - quantity < 0:
+            # 在庫が足りない場合のエラーメッセージ
+            error_message = "在庫が不足しているため、おやつを与えることができません。"
+            # snacksテーブルからおやつのリストを再取得
+            snacks = conn.execute('SELECT id, name FROM snacks').fetchall()
+            # 消費履歴を再取得
+            give_snack_history = conn.execute('''
+                SELECT g.id, s.name, g.quantity, g.given_date
+                FROM snack_giving g
+                JOIN snacks s ON g.snack_id = s.id
+                ORDER BY g.given_date DESC
+            ''').fetchall()
+            conn.close()
+            return render_template('give_snack.html', snacks=snacks, give_snack_history=give_snack_history, error_message=error_message)
 
         # おやつを与える処理を実行
         conn.execute('INSERT INTO snack_giving (snack_id, quantity, given_date) VALUES (?, ?, ?)',

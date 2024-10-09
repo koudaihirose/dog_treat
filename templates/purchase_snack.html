@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="container my-4">
-        <h2 class="mb-4">おやつの購入履歴を登録</h2>
+        <h2 class="mb-4">購入履歴を登録</h2>
 
         <form method="POST" action="{{ url_for('purchase_snack') }}">
             <div class="row mb-3">
@@ -23,7 +23,7 @@
 
                 <div class="col-md-1">
                     <label for="quantity" class="form-label">個数:</label>
-                    <input type="number" name="quantity" id="quantity" class="form-control" required>
+                    <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
                 </div>
 
                 <div class="col-md-5">

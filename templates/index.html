@@ -2,8 +2,120 @@
 
 {% block content %}
 
-    <p>ここはトップページです。在庫確認にテーブル機能を移しましたのでこのページの表示内容は変更可能です</p>
 
-    
-    
+<style>
+    .timeline {
+        position: relative;
+        padding: 0;
+        margin: 10px 0;
+        list-style: none;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin: 5px 0;
+        padding-left: 40px;
+    }
+
+    .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: 18px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background-color: #d4dde4;
+    }
+
+    .timeline-date {
+        font-size: 14px;
+        color: #999;
+    }
+
+    .timeline-content {
+        background-color: #f8f9fa;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .timeline-content h5 {
+        margin-top: 0;
+    }
+    .timeline-content p {
+        margin-top: 0;
+        margin-bottom: 0px;
+    }
+    .badge {
+        font-size: 12px;
+    }
+
+    .timeline-item-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 36px;
+        height: 36px;
+        background-color: #d4dde4;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgb(0, 0, 0);
+    }
+</style>
+
+
+    <div class="container my-4">
+        <h2 class="mb-4">直近のアクティビティ(10件まで)</h2>
+        <ul class="timeline">
+            {% for activity in recent_activities %}
+                <li class="timeline-item">
+                    <div class="timeline-item-icon">
+                        {% if activity.type == 'register' %}
+                            <i class="bi bi-database-fill-add"></i>
+                        {% elif activity.type == 'allergies' %}
+                            <i class="bi bi-patch-plus-fill"></i>
+                        {% elif activity.type == 'purchase' %}
+                            <i class="bi bi-cart-fill"></i>
+                        {% elif activity.type == 'give' %}
+                            <i class="bi bi-box-arrow-in-right"></i>
+                        {% elif activity.type == 'incident' %}
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="timeline-date">{{ activity.date }}</div>
+                    {% if activity.type == 'register' %}
+                        <div class="timeline-content">
+                            <h5 class="text-primary">{{ activity.title }}</h5> <!-- タイトル表示 -->
+                            <p>{{ activity.item_name }}を登録しました。</p>
+                        </div>
+                    {% elif activity.type == 'allergies' %}
+                        <div class="timeline-content">
+                            <h5 class="text-primary">{{ activity.title }}</h5> <!-- タイトル表示 -->
+                            <p>{{ activity.item_name }}を追加しました。</p>
+                        </div>
+                    {% elif activity.type == 'purchase' %}
+                        <div class="timeline-content">
+                            <h5 class="text-primary">{{ activity.title }}</h5> <!-- タイトル表示 -->
+                            <p>{{ activity.item_name }}を{{ activity.quantity }}個購入しました。</p>
+                        </div>
+                    {% elif activity.type == 'give' %}
+                        <div class="timeline-content">
+                            <h5 class="text-success">{{ activity.title }}</h5> <!-- タイトル表示 -->
+                            <p>{{ activity.item_name }}を{{ activity.quantity }}個与えました。</p>
+                        </div>
+                    {% elif activity.type == 'incident' %}
+                        <div class="timeline-content">
+                            <h5 class="text-success">{{ activity.title }}</h5> <!-- タイトル表示 -->
+                            <p>内容：{{ activity.note }}</p>
+                        </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
 {% endblock %}

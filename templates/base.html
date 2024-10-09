@@ -6,7 +6,9 @@
     <title>犬のおやつ管理アプリ</title>
 
     <!-- Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Optional: Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -14,24 +16,49 @@
 
     <!-- ヘッダー部分 -->
     <header>
-        <h1>犬のおやつ管理アプリ</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">ホーム</a></li>
-                <li><a href="{{ url_for('add_snack') }}">おやつを登録</a></li>
-                <li><a href="{{ url_for('give_snack') }}">おやつをあげる</a></li>
-                <li><a href="{{ url_for('purchase_snack') }}">購入記録</a></li>
-                <li><a href="{{ url_for('stock') }}">在庫確認</a></li>
-                <li><a href="{{ url_for('allergies') }}">アレルギー一覧</a></li>                
-                <li><a href="{{ url_for('incident_records') }}">異常記録</a></li>
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">犬のおやつ管理アプリ</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">ホーム</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register_snack') }}">おやつを登録</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('give_snack') }}">おやつをあげる</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('purchase_snack') }}">購入記録</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('stock') }}">在庫確認</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('allergies') }}">アレルギー一覧</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('incident_records') }}">異常記録</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
+
+
 
     <!-- ページごとのコンテンツがここに挿入される -->
     <div class="content">
         {% block content %}{% endblock %}
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
 
 </body>
 </html>
