@@ -44,9 +44,9 @@
                         <th>個数</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody  id="snack-table-body">
                     {% for entry in give_snack_history %}
-                    <tr>
+                    <tr style="display: {% if loop.index <= 10 %}table-row{% else %}none{% endif %}">
                         <td>{{ entry.name }}</td>
                         <td>{{ entry.given_date }}</td>
                         <td>{{ entry.quantity }}</td>
@@ -54,6 +54,33 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <button id="show-more-btn" class="btn btn-primary" style="display: none;">次の10件を表示</button>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentIndex = 10; // 最初に表示される件数
+            const rows = document.querySelectorAll("#snack-table-body tr");
+            const showMoreBtn = document.getElementById("show-more-btn");
+
+            // テーブル行の数が10件を超える場合にボタンを表示
+            if (rows.length > 10) {
+                showMoreBtn.style.display = "block";
+            }
+    
+            showMoreBtn.addEventListener("click", function() {
+                const nextIndex = currentIndex + 10; // 次に表示する範囲
+                for (let i = currentIndex; i < nextIndex && i < rows.length; i++) {
+                    rows[i].style.display = "table-row"; // 次の10件を表示
+                }
+                currentIndex = nextIndex;
+    
+                // 全て表示したらボタンを非表示にする
+                if (currentIndex >= rows.length) {
+                    showMoreBtn.style.display = "none";
+                }
+            });
+        });
+    </script>
 {% endblock %}

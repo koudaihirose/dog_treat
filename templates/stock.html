@@ -20,7 +20,7 @@
                         <td>{{ snack.stock }}</td>
                         <td>
                             {% if snack.photos %}
-                                {% for photo in snack.photos.split(', ') %}
+                                {% for photo in snack.photos.split(',') %}
                                     <img src="{{ url_for('static', filename=photo) }}" alt="Snack Photo" style="max-width: 100px;">
                                 {% endfor %}
                             {% else %}

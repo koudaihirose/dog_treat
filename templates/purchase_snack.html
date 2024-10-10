@@ -45,16 +45,42 @@
                     <th>購入場所</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody  id="snack-table-body">
                 {% for purchase in purchase_history %}
-                    <tr>
-                        <td>{{ purchase.name }}</td>
-                        <td>{{ purchase.purchase_date }}</td>
-                        <td>{{ purchase.quantity }}</td>
-                        <td>{{ purchase.purchase_place }}</td>
-                    </tr>
+                <tr style="display: {% if loop.index <= 10 %}table-row{% else %}none{% endif %}">
+                    <td>{{ purchase.name }}</td>
+                    <td>{{ purchase.purchase_date }}</td>
+                    <td>{{ purchase.quantity }}</td>
+                    <td>{{ purchase.purchase_place }}</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <button id="show-more-btn" class="btn btn-primary" style="display: none;">次の10件を表示</button>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentIndex = 10; // 最初に表示される件数
+            const rows = document.querySelectorAll("#snack-table-body tr");
+            const showMoreBtn = document.getElementById("show-more-btn");
+
+            // テーブル行の数が10件を超える場合にボタンを表示
+            if (rows.length > 10) {
+                showMoreBtn.style.display = "block";
+            }
+    
+            showMoreBtn.addEventListener("click", function() {
+                const nextIndex = currentIndex + 10; // 次に表示する範囲
+                for (let i = currentIndex; i < nextIndex && i < rows.length; i++) {
+                    rows[i].style.display = "table-row"; // 次の10件を表示
+                }
+                currentIndex = nextIndex;
+    
+                // 全て表示したらボタンを非表示にする
+                if (currentIndex >= rows.length) {
+                    showMoreBtn.style.display = "none";
+                }
+            });
+        });
+    </script>
 {% endblock %}

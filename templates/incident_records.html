@@ -35,14 +35,14 @@
                     <th>写真</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody  id="incident-table-body">
                 {% for record in incident_records %}
-                <tr>
+                <tr style="display: {% if loop.index <= 10 %}table-row{% else %}none{% endif %}">
                     <td>{{ record.incident_time }}</td>
                     <td>{{ record.note }}</td>
                     <td>
                         {% if record.photos %}
-                            {% for photo in record.photos.split(', ') %}
+                            {% for photo in record.photos.split(',') %}
                                 <img src="{{ url_for('static', filename=photo)}}" alt="Incident Photo" style="max-width: 100px;">
                             {% endfor %}
                         {% else %}
@@ -53,5 +53,31 @@
                 {% endfor %}
             </tbody>
         </table>
+        <button id="show-more-btn" class="btn btn-primary" style="display: none;">次の10件を表示</button>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentIndex = 10; // 最初に表示される件数
+            const rows = document.querySelectorAll("#incident-table-body tr");
+            const showMoreBtn = document.getElementById("show-more-btn");
+
+            // テーブル行の数が10件を超える場合にボタンを表示
+            if (rows.length > 10) {
+                showMoreBtn.style.display = "block";
+            }
+    
+            showMoreBtn.addEventListener("click", function() {
+                const nextIndex = currentIndex + 10; // 次に表示する範囲
+                for (let i = currentIndex; i < nextIndex && i < rows.length; i++) {
+                    rows[i].style.display = "table-row"; // 次の10件を表示
+                }
+                currentIndex = nextIndex;
+    
+                // 全て表示したらボタンを非表示にする
+                if (currentIndex >= rows.length) {
+                    showMoreBtn.style.display = "none";
+                }
+            });
+        });
+    </script>
 {% endblock %}

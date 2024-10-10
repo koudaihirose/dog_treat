@@ -138,7 +138,7 @@ def give_snack():
         # 現在の在庫数を取得
         stock_query = '''
             SELECT 
-                COALESCE(SUM(DISTINCT ph.quantity), 0) - COALESCE(SUM(DISTINCT sg.quantity), 0) AS stock
+            COALESCE(SUM(DISTINCT ph.quantity), 0) - COALESCE(SUM(DISTINCT sg.quantity), 0) AS stock
             FROM snacks s
             LEFT JOIN purchase_history ph ON s.id = ph.snack_id
             LEFT JOIN snack_giving sg ON s.id = sg.snack_id
@@ -206,11 +206,11 @@ def stock():
 
     snacks = conn.execute('''
         SELECT s.id, s.name, 
-                COALESCE(GROUP_CONCAT(a.name, ', '), 'なし') AS allergies,
+                COALESCE(GROUP_CONCAT(DISTINCT a.name), 'なし') AS allergies,
                 COALESCE(SUM(DISTINCT ph.quantity), 0) AS total_purchased,
                 COALESCE(SUM(DISTINCT sg.quantity), 0) AS total_given,
                 COALESCE(SUM(DISTINCT ph.quantity), 0, 0) - COALESCE(SUM(DISTINCT sg.quantity), 0) AS stock,
-                REPLACE(REPLACE(COALESCE(GROUP_CONCAT(sp.photo_path),'' ), '\\', '/'), 'static/', '') AS photos
+                REPLACE(REPLACE(COALESCE(GROUP_CONCAT(DISTINCT sp.photo_path),'' ), '\\', '/'), 'static/', '') AS photos
         FROM snacks s
         LEFT JOIN snack_allergies sa ON s.id = sa.snack_id
         LEFT JOIN allergies a ON sa.allergy_id = a.id
@@ -271,6 +271,7 @@ def incident_records():
         FROM incident_records ir
         LEFT JOIN incident_photos ip ON ir.id = ip.incident_id
         GROUP BY ir.id
+        ORDER BY ir.incident_time DESC
     ''').fetchall()
 
     conn.close()
@@ -281,4 +282,4 @@ def about():
 
     return render_template('about.html')
 if __name__ == '__main__':
-    app.run(debug=false)
+    app.run(debug=True)
